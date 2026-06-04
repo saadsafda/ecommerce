@@ -580,6 +580,12 @@ def create_customer_user(
 	)
 
 	_set_customer_session(customer_name)
+	try:
+		from ecommerce.cart import merge_guest_cart_into_customer_order
+
+		merge_guest_cart_into_customer_order(customer_name)
+	except Exception:
+		frappe.log_error(frappe.get_traceback(), "Customer Cart Merge Failed")
 	return get_customer_account_data(order_limit=10, customer_name=customer_name)
 
 
@@ -599,6 +605,12 @@ def login_customer_user(email: str, password: str) -> dict[str, Any]:
 		frappe.throw(_("Incorrect email or password"), frappe.AuthenticationError)
 
 	_set_customer_session(customer_name)
+	try:
+		from ecommerce.cart import merge_guest_cart_into_customer_order
+
+		merge_guest_cart_into_customer_order(customer_name)
+	except Exception:
+		frappe.log_error(frappe.get_traceback(), "Customer Cart Merge Failed")
 	return get_customer_account_data(order_limit=10, customer_name=customer_name)
 
 

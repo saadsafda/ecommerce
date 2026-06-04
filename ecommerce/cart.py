@@ -294,6 +294,9 @@ def merge_guest_cart_into_customer_order(customer_name: str | None = None) -> No
 		_add_item_to_customer_sales_order(customer_name, cstr(item_code), max(cint(item.get("qty", 1)), 1))
 
 	_save_cart_data(token, {"items": {}})
+	request = getattr(frappe.local, "request", None)
+	if cstr(getattr(request, "method", "")).upper() == "GET":
+		frappe.db.commit()
 
 
 def _enrich_cart_items(items_dict: dict[str, dict]) -> list[dict[str, Any]]:
