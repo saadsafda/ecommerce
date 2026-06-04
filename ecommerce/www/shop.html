@@ -1,0 +1,112 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}
+	{% include "ecommerce/templates/includes/ecommerce_navbar.html" %}
+{% endblock %}
+
+{% block footer %}
+	{% include "ecommerce/templates/includes/ecommerce_footer.html" %}
+{% endblock %}
+
+{% block page_container %}
+<main class="ec-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}">
+	{# ===== SHOP HERO ===== #}
+	<section class="ec-shop-hero">
+		<div class="ec-container">
+			<h1>
+				<span class="material-symbols-outlined" style="font-size:32px;vertical-align:middle;margin-right:8px;opacity:0.6">inventory_2</span>
+				Wholesale Catalog
+			</h1>
+			<p>Search, filter, and discover products managed directly from your Frappe backend.</p>
+		</div>
+	</section>
+
+	{# ===== SHOP LAYOUT ===== #}
+	<section class="ec-section">
+		<div class="ec-container ec-shop-layout">
+			{# Sidebar Filters #}
+			<aside class="ec-filter-panel ec-reveal">
+				<h2>
+					<span class="material-symbols-outlined" style="font-size:20px">tune</span>
+					Filters
+				</h2>
+				<form method="get" action="/shop" class="ec-filter-form">
+					<label for="shop-search">Search</label>
+					<input id="shop-search" type="search" name="q" value="{{ search_query or '' }}" placeholder="Name or SKU...">
+
+					<label for="shop-item-group">Category</label>
+					<select id="shop-item-group" name="item_group">
+						<option value="">All Categories</option>
+						{% for group in item_group_filters %}
+						<option value="{{ group.name }}" {% if selected_item_group == group.name %}selected{% endif %}>
+							{{ group.item_group_name or group.name }}
+						</option>
+						{% endfor %}
+					</select>
+
+					<label for="shop-brand">Brand</label>
+					<select id="shop-brand" name="brand">
+						<option value="">All Brands</option>
+						{% for row in brand_filters %}
+						<option value="{{ row.name }}" {% if selected_brand == row.name %}selected{% endif %}>
+							{{ row.brand or row.name }}
+						</option>
+						{% endfor %}
+					</select>
+
+					<button type="submit">
+						<span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px">filter_list</span>
+						Apply Filters
+					</button>
+					{% if search_query or selected_item_group or selected_brand %}
+					<a href="/shop" class="ec-clear-link">
+						<span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:2px">close</span>
+						Clear Filters
+					</a>
+					{% endif %}
+				</form>
+			</aside>
+
+			{# Product Grid #}
+			<div class="ec-shop-content">
+				<div class="ec-result-head ec-reveal">
+					<h2>Products</h2>
+					<p>{{ total_count }} result{{ "s" if total_count != 1 else "" }}</p>
+				</div>
+
+				{% if items %}
+				<div class="ec-product-grid">
+					{% for item in items %}
+						{% include "ecommerce/templates/includes/ecommerce_product_card.html" %}
+					{% endfor %}
+				</div>
+				<div class="ec-pagination ec-reveal">
+					{% if has_previous %}
+					<a href="/shop{% if previous_query %}?{{ previous_query }}{% endif %}" class="ec-page-link">
+						<span class="material-symbols-outlined" style="font-size:18px">chevron_left</span>
+						Previous
+					</a>
+					{% endif %}
+					{% if has_next %}
+					<a href="/shop{% if next_query %}?{{ next_query }}{% endif %}" class="ec-page-link">
+						Next
+						<span class="material-symbols-outlined" style="font-size:18px">chevron_right</span>
+					</a>
+					{% endif %}
+				</div>
+				{% else %}
+				<div class="ec-empty-state ec-reveal">
+					<span class="material-symbols-outlined" style="font-size:72px;color:var(--ec-outline);opacity:0.2;margin-bottom:16px;">search_off</span>
+					<h3>No products found</h3>
+					<p>Try another search keyword, category, or brand filter.</p>
+					<a href="/shop" class="ec-primary-btn">
+						<span class="material-symbols-outlined" style="font-size:18px">restart_alt</span>
+						Reset Catalog View
+					</a>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</section>
+</main>
+{% endblock %}

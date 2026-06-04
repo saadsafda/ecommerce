@@ -1,0 +1,236 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block page_container %}
+{% set theme = ecommerce_theme or theme_settings or {} %}
+{% set home = ecommerce_home_settings or home_settings or {} %}
+
+<main class="ec-cart-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}" data-cart-page>
+	<header class="ec-cart-topbar">
+		<a href="/" class="ec-cart-brand">
+			{% if theme.logo %}
+			<img src="{{ theme.logo | abs_url }}" alt="{{ home.site_title or 'Frappe Ecommerce' }}">
+			{% endif %}
+			<span>{{ home.site_title or "Frappe Ecommerce" }}</span>
+		</a>
+
+		<nav class="ec-cart-nav" aria-label="Cart navigation">
+			<a href="/shop">All Categories</a>
+			<a href="/contact">Bulk Orders</a>
+			<a href="/shop#brands">Technical Specs</a>
+			<a href="/contact">Logistics</a>
+		</nav>
+
+		<form action="/shop" method="get" class="ec-cart-search">
+			<input type="search" name="q" placeholder="Search SKU or Product..." aria-label="Search SKU or product">
+			<button type="submit" aria-label="Search">
+				<span class="material-symbols-outlined" aria-hidden="true">search</span>
+			</button>
+		</form>
+
+		<div class="ec-cart-header-actions">
+			<a href="/cart" aria-label="Cart">
+				<span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+				<strong data-cart-badge-count>{{ cart_count }}</strong>
+			</a>
+			<a href="/shop" aria-label="Favorites">
+				<span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+			</a>
+			<a href="/account" aria-label="Account">
+				<span class="material-symbols-outlined" aria-hidden="true">person</span>
+			</a>
+		</div>
+	</header>
+
+	<section class="ec-cart-shell">
+		<nav class="ec-cart-breadcrumb" aria-label="Breadcrumb">
+			<a href="/">Home</a>
+			<span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+			<strong>Shopping Cart</strong>
+		</nav>
+
+		{% if cart_items %}
+		<div class="ec-cart-layout">
+			<section class="ec-cart-panel">
+				<div class="ec-cart-panel-head">
+					<h1>Your Cart (<span data-cart-badge-count>{{ cart_count }}</span> items)</h1>
+					<button type="button" class="ec-cart-clear-btn" data-cart-clear>
+						<span class="material-symbols-outlined" aria-hidden="true">delete</span>
+						Clear Cart
+					</button>
+				</div>
+
+				<div class="ec-cart-table-wrap">
+					<table class="ec-cart-table">
+						<thead>
+							<tr>
+								<th>Product Detail</th>
+								<th>Unit Price</th>
+								<th>Quantity</th>
+								<th>Total</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for item in cart_items %}
+							<tr data-cart-row="{{ item.item_code }}">
+								<td class="ec-cart-product-cell">
+									<div class="ec-cart-product">
+										{% if item.image %}
+										<img src="{{ item.image | abs_url }}" alt="{{ item.item_name }}">
+										{% else %}
+										<div class="ec-cart-product-fallback">
+											<span class="material-symbols-outlined" aria-hidden="true">image</span>
+										</div>
+										{% endif %}
+										<div>
+											<strong>{{ item.item_name }}</strong>
+											<p>SKU: {{ item.item_code }}</p>
+											<p>Variant: {{ item.brand or item.item_group or item.uom or "Standard" }}</p>
+										</div>
+									</div>
+								</td>
+								<td class="ec-cart-unit-price">{{ item.formatted_price or "Request Quote" }}</td>
+								<td>
+									<div class="ec-cart-qty-stepper">
+										<button type="button" data-qty-minus data-item="{{ item.item_code }}" aria-label="Decrease {{ item.item_name }} quantity">
+											<span class="material-symbols-outlined" aria-hidden="true">remove</span>
+										</button>
+										<input type="number" min="1" value="{{ item.qty }}" data-qty-input data-item="{{ item.item_code }}" aria-label="{{ item.item_name }} quantity">
+										<button type="button" data-qty-plus data-item="{{ item.item_code }}" aria-label="Increase {{ item.item_name }} quantity">
+											<span class="material-symbols-outlined" aria-hidden="true">add</span>
+										</button>
+									</div>
+								</td>
+								<td class="ec-cart-line-total" data-line-total="{{ item.item_code }}">{{ item.formatted_line_total }}</td>
+								<td>
+									<button type="button" class="ec-cart-remove-btn" data-cart-remove="{{ item.item_code }}" aria-label="Remove {{ item.item_name }}">
+										<span class="material-symbols-outlined" aria-hidden="true">close</span>
+									</button>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+				<div class="ec-cart-panel-foot">
+					<a href="/shop" class="ec-cart-continue">
+						<span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+						Continue Shopping
+					</a>
+					<label class="ec-cart-protection">
+						<span>Shipping protection included?</span>
+						<input type="checkbox" aria-label="Shipping protection">
+						<i aria-hidden="true"></i>
+					</label>
+				</div>
+			</section>
+
+			<aside class="ec-cart-side">
+				<section class="ec-cart-summary-card">
+					<h2>Order Summary</h2>
+					<div class="ec-cart-summary-row">
+						<span>Subtotal</span>
+						<strong data-cart-subtotal>{{ cart_subtotal }}</strong>
+					</div>
+					<div class="ec-cart-summary-row">
+						<span>Shipping Estimate</span>
+						<strong data-cart-shipping>{{ cart_shipping }}</strong>
+					</div>
+					<div class="ec-cart-summary-row">
+						<span>Tax (VAT 5%)</span>
+						<strong data-cart-tax>{{ cart_tax }}</strong>
+					</div>
+					<div class="ec-cart-summary-total">
+						<div>
+							<span>Total</span>
+							<small>Net Payable Amount</small>
+						</div>
+						<strong data-cart-grand-total>{{ cart_total }}</strong>
+					</div>
+
+					<label class="ec-cart-coupon">
+						<span>Coupon Code</span>
+						<div>
+							<input type="text" placeholder="Enter code" aria-label="Coupon code">
+							<button type="button">Apply</button>
+						</div>
+					</label>
+
+					<a href="/checkout" class="ec-cart-checkout-btn">
+						Proceed to Checkout
+						<span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+					</a>
+
+					<div class="ec-cart-payments" aria-label="Accepted payment options">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+				</section>
+
+				<section class="ec-cart-support-card">
+					<span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+					<div>
+						<h2>Wholesale Support</h2>
+						<p>Need help with bulk logistics or tax exemption? Our agents are available 24/7 for corporate clients.</p>
+						<a href="/contact">Contact Distribution Desk</a>
+					</div>
+				</section>
+			</aside>
+		</div>
+		{% else %}
+		<section class="ec-cart-empty">
+			<span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+			<h1>Your cart is empty</h1>
+			<p>Browse our catalog and add items to get started.</p>
+			<a href="/shop">Start Shopping</a>
+		</section>
+		{% endif %}
+	</section>
+
+	<footer class="ec-cart-footer">
+		<div class="ec-cart-footer-grid">
+			<div>
+				<h2>{{ home.site_title or "Frappe Ecommerce" }}</h2>
+				<p>Global leaders in high-performance industrial supply chain solutions. Providing businesses with the tools they need to succeed since 2024.</p>
+			</div>
+			<div>
+				<h3>Solutions</h3>
+				<a href="/contact">Bulk Distribution</a>
+				<a href="/contact">API Documentation</a>
+				<a href="/contact">Logistics Network</a>
+			</div>
+			<div>
+				<h3>Company</h3>
+				<a href="/privacy">Privacy Policy</a>
+				<a href="/terms">Terms of Service</a>
+				<a href="/contact">Shipping Info</a>
+			</div>
+			<div>
+				<h3>Newsletter</h3>
+				<form class="ec-cart-newsletter" onsubmit="return false;">
+					<input type="email" placeholder="Corporate Email" aria-label="Corporate email">
+					<button type="submit" aria-label="Subscribe">
+						<span class="material-symbols-outlined" aria-hidden="true">send</span>
+					</button>
+				</form>
+			</div>
+		</div>
+		<div class="ec-cart-footer-bottom">
+			<p>&copy; {{ current_year }} {{ home.site_title or "Frappe Ecommerce" }}. All Rights Reserved.</p>
+			<nav aria-label="Social links">
+				<a href="/contact">LinkedIn</a>
+				<a href="/contact">Twitter</a>
+				<a href="/contact">YouTube</a>
+			</nav>
+		</div>
+	</footer>
+</main>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}
+	{% include "ecommerce/templates/includes/ecommerce_navbar.html" %}
+{% endblock %}
+
+{% block footer %}
+	{% include "ecommerce/templates/includes/ecommerce_footer.html" %}
+{% endblock %}
+
+{% block page_container %}
+<main class="ec-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}" data-customer-forgot-page>
+	<section class="ec-account-hero">
+		<div class="ec-container">
+			<h1>Forgot Password</h1>
+			<p>Request a password reset link for your customer account.</p>
+		</div>
+	</section>
+
+	<section class="ec-section">
+		<div class="ec-container">
+			<div class="ec-account-message" data-account-message></div>
+
+			{% if non_customer_user %}
+			<div class="ec-account-notice ec-reveal">
+				<h2>System User Session Detected</h2>
+				<p>You are currently logged in as a system user. Please logout first to use customer password reset.</p>
+				<div class="ec-login-actions">
+					<a href="/app" class="ec-secondary-btn">Go to Desk</a>
+					<a href="/api/method/logout" class="ec-primary-btn">Logout</a>
+				</div>
+			</div>
+			{% else %}
+			<div class="ec-auth-grid ec-auth-grid-single">
+				<div class="ec-auth-card-wrapper ec-reveal">
+					<div class="ec-auth-card">
+						<h2>Password Reset</h2>
+						<form data-account-reset-form method="post">
+							<label>Email</label>
+							<input type="email" name="email" required>
+							<button type="submit" class="ec-secondary-btn">Send Reset Link</button>
+						</form>
+						<div class="ec-auth-links">
+							<a href="/customer-login">Back to login</a>
+							<a href="/customer-register">Create new account</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</section>
+</main>
+{% endblock %}

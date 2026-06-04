@@ -1,0 +1,108 @@
+{% set home = ecommerce_home_settings or home_settings or {} %}
+
+{# Newsletter Section (above footer) #}
+<section class="ec-newsletter" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}">
+	<div class="ec-container ec-newsletter-inner">
+		<div>
+			<h3>Stay Ahead of the Supply Chain</h3>
+			<p>Get exclusive wholesale deals, new product alerts, and technical specs delivered to your inbox.</p>
+		</div>
+		<form class="ec-newsletter-form" onsubmit="return false;">
+			<input type="email" placeholder="Enter your corporate email" aria-label="Email for newsletter">
+			<button type="submit">Subscribe</button>
+		</form>
+	</div>
+</section>
+
+<footer class="ec-footer-shell" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}">
+	<div class="ec-container">
+		<div class="ec-footer-divider"></div>
+	</div>
+	<div class="ec-container ec-footer-grid">
+		<div class="ec-footer-brand ec-reveal">
+			<h3>{{ home.site_title or "Frappe Ecommerce" }}</h3>
+			<p>
+				Global leaders in high-performance industrial supply chain solutions.
+				Providing businesses with the tools they need to succeed.
+			</p>
+			<div class="ec-footer-social">
+				<a href="#" aria-label="LinkedIn">
+					<span class="material-symbols-outlined" style="font-size:20px">share</span>
+				</a>
+				<a href="#" aria-label="Twitter">
+					<span class="material-symbols-outlined" style="font-size:20px">tag</span>
+				</a>
+				<a href="#" aria-label="YouTube">
+					<span class="material-symbols-outlined" style="font-size:20px">play_circle</span>
+				</a>
+			</div>
+		</div>
+
+		<div class="ec-footer-column ec-reveal">
+			<h4>Solutions</h4>
+			<a href="/shop">All Products</a>
+			<a href="/shop?start=0">New In Store</a>
+			<a href="/shop#brands">Brands</a>
+			<a href="/shop">Bulk Distribution</a>
+		</div>
+
+		<div class="ec-footer-column ec-reveal">
+			<h4>Company</h4>
+			<a href="/about">About Us</a>
+			<a href="/contact">Contact</a>
+			<a href="/privacy">Privacy Policy</a>
+			<a href="/terms">Terms of Service</a>
+		</div>
+
+		<div class="ec-footer-column ec-reveal">
+			<h4>Support</h4>
+			{% if home.hotline_number %}
+			<a href="tel:{{ home.hotline_number }}">
+				<span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;margin-right:4px">call</span>
+				{{ home.hotline_number }}
+			</a>
+			{% endif %}
+			<a href="/customer-login">Account Login</a>
+			<a href="/contact">Request Quote</a>
+			<a href="/contact">Shipping Info</a>
+		</div>
+	</div>
+
+	<div class="ec-container ec-footer-bottom">
+		<p>&copy; {{ frappe.utils.now_datetime().year }} {{ home.site_title or "Frappe Ecommerce" }}. All Rights Reserved.</p>
+		<div class="ec-footer-payments">
+			<span>
+				<span class="material-symbols-outlined" style="font-size:16px">credit_card</span>
+				VISA
+			</span>
+			<span>
+				<span class="material-symbols-outlined" style="font-size:16px">credit_card</span>
+				MASTERCARD
+			</span>
+			<span>
+				<span class="material-symbols-outlined" style="font-size:16px">account_balance</span>
+				NET 30
+			</span>
+		</div>
+	</div>
+
+	{# Mobile Bottom Nav #}
+	<nav class="ec-mobile-bottom-nav">
+		<a href="/">
+			<span class="material-symbols-outlined ec-nav-icon">home</span>
+			Home
+		</a>
+		<a href="/shop">
+			<span class="material-symbols-outlined ec-nav-icon">grid_view</span>
+			Category
+		</a>
+		<a href="/shop?q=">
+			<span class="material-symbols-outlined ec-nav-icon">search</span>
+			Search
+		</a>
+		<a href="/shop">
+			<span class="material-symbols-outlined ec-nav-icon">shopping_cart</span>
+			Cart
+		</a>
+	</nav>
+</footer>

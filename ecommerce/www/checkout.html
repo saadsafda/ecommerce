@@ -1,0 +1,262 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block page_container %}
+{% set theme = ecommerce_theme or theme_settings or {} %}
+{% set home = ecommerce_home_settings or home_settings or {} %}
+{% set address = default_shipping_address or {} %}
+{% set user = checkout_user or {} %}
+{% set customer = checkout_customer or {} %}
+{% set company_name = customer.customer_name or user.full_name or '' %}
+{% set full_name = user.full_name or customer.customer_name or '' %}
+{% set phone = address.phone or user.mobile_no or customer.primary_phone or '' %}
+{% set email = address.email_id or user.email or customer.primary_email or '' %}
+
+<main class="ec-checkout-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}" data-checkout-page>
+	<header class="ec-checkout-topbar">
+		<a href="/" class="ec-checkout-brand">
+			{% if theme.logo %}
+			<img src="{{ theme.logo | abs_url }}" alt="{{ home.site_title or 'Frappe Ecommerce' }}">
+			{% endif %}
+			<span>{{ home.site_title or "Frappe Ecommerce" }}</span>
+		</a>
+		<nav class="ec-checkout-nav" aria-label="Checkout navigation">
+			<a href="/shop">Products</a>
+			<a href="/shop#solutions">Solutions</a>
+			<a href="/contact">Support</a>
+			<a href="/contact">Contact</a>
+		</nav>
+		<div class="ec-checkout-header-actions">
+			<a href="/cart" aria-label="Shopping cart">
+				<span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+			</a>
+			<a href="/account" aria-label="Account">
+				<span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
+			</a>
+		</div>
+	</header>
+
+	<section class="ec-checkout-shell">
+		<div class="ec-checkout-steps" aria-label="Checkout progress">
+			<div class="ec-checkout-step is-active">
+				<span>1</span>
+				<strong>Shipping</strong>
+			</div>
+			<div class="ec-checkout-step">
+				<span>2</span>
+				<strong>Payment</strong>
+			</div>
+			<div class="ec-checkout-step">
+				<span>3</span>
+				<strong>Review</strong>
+			</div>
+		</div>
+
+		<div class="ec-checkout-message" data-checkout-message></div>
+
+		<div class="ec-checkout-layout">
+			<form class="ec-checkout-form" data-checkout-form>
+				<input type="hidden" name="billing_address" value="{{ default_billing_address.name or '' }}" data-default-billing-address>
+				<input type="hidden" name="shipping_address" value="{{ default_shipping_address.name or '' }}" data-default-shipping-address>
+
+				<section class="ec-checkout-card ec-checkout-address-card">
+					<h1>
+						<span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+						Shipping Address
+					</h1>
+
+					<div class="ec-checkout-field">
+						<label for="checkout-company-name">Company Name</label>
+						<input id="checkout-company-name" name="company_name" type="text" value="{{ company_name }}" placeholder="e.g. Industrial Solutions Corp">
+					</div>
+
+					<div class="ec-checkout-field">
+						<label for="checkout-full-name">Full Name</label>
+						<input id="checkout-full-name" name="full_name" type="text" value="{{ full_name }}" placeholder="John Doe" required>
+					</div>
+
+					<div class="ec-checkout-field">
+						<label for="checkout-street-address">Street Address</label>
+						<input id="checkout-street-address" name="street_address" type="text" value="{{ address.address_line1 or '' }}{% if address.address_line2 %}, {{ address.address_line2 }}{% endif %}" placeholder="123 Industrial Way, Suite 500" required>
+					</div>
+
+					<div class="ec-checkout-field-grid">
+						<div class="ec-checkout-field">
+							<label for="checkout-city">City</label>
+							<input id="checkout-city" name="city" type="text" value="{{ address.city or '' }}" placeholder="Chicago" required>
+						</div>
+						<div class="ec-checkout-field">
+							<label for="checkout-state">State</label>
+							<input id="checkout-state" name="state" type="text" value="{{ address.state or '' }}" placeholder="IL">
+						</div>
+						<div class="ec-checkout-field">
+							<label for="checkout-zip">Zip</label>
+							<input id="checkout-zip" name="zip" type="text" value="{{ address.pincode or '' }}" placeholder="60601">
+						</div>
+					</div>
+
+					<div class="ec-checkout-field">
+						<label for="checkout-phone">Phone Number</label>
+						<input id="checkout-phone" name="phone" type="tel" value="{{ phone }}" placeholder="+1 (555) 000-0000">
+					</div>
+
+					<input type="hidden" name="email" value="{{ email }}">
+				</section>
+
+				<section class="ec-checkout-card ec-checkout-method-card">
+					<h2>
+						<span class="material-symbols-outlined" aria-hidden="true">local_shipping</span>
+						Shipping Method
+					</h2>
+					<label class="ec-checkout-choice is-selected">
+						<input type="radio" name="shipping_method" value="Standard (3-5 days)" data-checkout-choice checked>
+						<span class="ec-checkout-radio" aria-hidden="true"></span>
+						<span>
+							<strong>Standard (3-5 days)</strong>
+							<small>Default carrier selection for small items.</small>
+						</span>
+						<b>$45.00</b>
+					</label>
+					<label class="ec-checkout-choice">
+						<input type="radio" name="shipping_method" value="Express (1-2 days)" data-checkout-choice>
+						<span class="ec-checkout-radio" aria-hidden="true"></span>
+						<span>
+							<strong>Express (1-2 days)</strong>
+							<small>Prioritized air freight for urgent supplies.</small>
+						</span>
+						<b>$120.00</b>
+					</label>
+					<label class="ec-checkout-choice">
+						<input type="radio" name="shipping_method" value="Wholesale Logistics (Freight)" data-checkout-choice>
+						<span class="ec-checkout-radio" aria-hidden="true"></span>
+						<span>
+							<strong>Wholesale Logistics (Freight)</strong>
+							<small>LTL shipping for palletized heavy machinery.</small>
+						</span>
+						<b>$450.00</b>
+					</label>
+				</section>
+
+				<section class="ec-checkout-card ec-checkout-payment-card">
+					<h2>
+						<span class="material-symbols-outlined" aria-hidden="true">payments</span>
+						Payment Method
+					</h2>
+					<div class="ec-checkout-payment-grid">
+						<label class="ec-checkout-payment is-selected">
+							<input type="radio" name="payment_method" value="Corporate Credit Card" data-checkout-payment checked>
+							<span class="material-symbols-outlined" aria-hidden="true">credit_card</span>
+							<strong>Corporate Credit Card</strong>
+						</label>
+						<label class="ec-checkout-payment">
+							<input type="radio" name="payment_method" value="Bank Wire Transfer" data-checkout-payment>
+							<span class="material-symbols-outlined" aria-hidden="true">account_balance</span>
+							<strong>Bank Wire Transfer</strong>
+						</label>
+						<label class="ec-checkout-payment">
+							<input type="radio" name="payment_method" value="Cash on Delivery" data-checkout-payment>
+							<span class="material-symbols-outlined" aria-hidden="true">payments</span>
+							<strong>Cash on Delivery</strong>
+						</label>
+					</div>
+				</section>
+			</form>
+
+			<aside class="ec-checkout-summary-card">
+				<h2>Order Summary</h2>
+				<div class="ec-checkout-summary-items">
+					{% for item in cart_items %}
+					<div class="ec-checkout-summary-item">
+						{% if item.image %}
+						<img src="{{ item.image | abs_url }}" alt="{{ item.item_name }}">
+						{% else %}
+						<div class="ec-checkout-summary-fallback">
+							<span class="material-symbols-outlined" aria-hidden="true">inventory_2</span>
+						</div>
+						{% endif %}
+						<div>
+							<strong>{{ item.item_name }}</strong>
+							<small>Qty: {{ item.qty }}</small>
+							<b>{{ item.formatted_line_total }}</b>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+
+				<div class="ec-checkout-summary-lines">
+					<div>
+						<span>Subtotal</span>
+						<strong>{{ cart_subtotal }}</strong>
+					</div>
+					<div>
+						<span>Shipping Estimate</span>
+						<strong>{{ cart_shipping }}</strong>
+					</div>
+					<div>
+						<span>Tax (VAT 5%)</span>
+						<strong>{{ cart_tax }}</strong>
+					</div>
+				</div>
+
+				<div class="ec-checkout-total-row">
+					<span>Total</span>
+					<strong>{{ cart_total }}</strong>
+				</div>
+
+				<button type="button" class="ec-checkout-place-btn" data-place-order-btn>
+					<span>Place Order</span>
+					<span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+				</button>
+
+				<div class="ec-checkout-trust-row">
+					<div>
+						<span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
+						<strong>Secure Checkout</strong>
+					</div>
+					<div>
+						<span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>
+						<strong>Certified B2B Distributor</strong>
+					</div>
+				</div>
+			</aside>
+		</div>
+	</section>
+
+	<footer class="ec-checkout-footer">
+		<div class="ec-checkout-footer-grid">
+			<div>
+				<h2>{{ home.site_title or "Frappe Ecommerce" }}</h2>
+				<p>Your authoritative partner in global industrial supply and wholesale logistics. Reliability in every SKU.</p>
+			</div>
+			<div>
+				<h3>Support</h3>
+				<a href="/contact">Shipping Info</a>
+				<a href="/contact">Returns</a>
+				<a href="/contact">Bulk Orders</a>
+			</div>
+			<div>
+				<h3>Legal</h3>
+				<a href="/terms">Terms of Service</a>
+				<a href="/privacy">Privacy Policy</a>
+				<a href="/sitemap.xml">Sitemap</a>
+			</div>
+			<div>
+				<h3>Connect</h3>
+				<div class="ec-checkout-socials">
+					<a href="/contact" aria-label="Business network"><span class="material-symbols-outlined" aria-hidden="true">business_center</span></a>
+					<a href="/contact" aria-label="Email"><span class="material-symbols-outlined" aria-hidden="true">mail</span></a>
+					<a href="/contact" aria-label="Phone"><span class="material-symbols-outlined" aria-hidden="true">call</span></a>
+				</div>
+			</div>
+		</div>
+		<div class="ec-checkout-footer-bottom">
+			<p>&copy; {{ current_year }} {{ home.site_title or "Frappe Ecommerce" }} Industrial Supplies. All rights reserved.</p>
+		</div>
+	</footer>
+</main>
+{% endblock %}

@@ -1,0 +1,300 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block page_container %}
+{% set theme = ecommerce_theme or theme_settings or {} %}
+{% set home = ecommerce_home_settings or home_settings or {} %}
+{% set user = account.user or {} %}
+{% set customer = account.customer or {} %}
+{% set metrics = account.metrics or {} %}
+{% set primary_address = account.primary_address or {} %}
+{% set display_name = user.full_name or customer.customer_name or "Customer" %}
+{% set account_label = customer.customer_name or display_name %}
+
+<main class="ec-dashboard-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}" data-account-page>
+	<header class="ec-dashboard-topbar">
+		<a href="/" class="ec-dashboard-brand" aria-label="{{ home.site_title or 'IndustrialDirect' }}">
+			{% if theme.logo %}
+			<img src="{{ theme.logo | abs_url }}" alt="{{ home.site_title or 'IndustrialDirect' }}">
+			{% endif %}
+			<span>{{ home.site_title or "IndustrialDirect" }}</span>
+		</a>
+
+		<nav class="ec-dashboard-topnav" aria-label="Account navigation">
+			<a href="/shop">Products</a>
+			<a href="/shop#brands">Solutions</a>
+			<a href="/contact">Support</a>
+		</nav>
+
+		<form action="/shop" method="get" class="ec-dashboard-search">
+			<input type="search" name="q" placeholder="Search SKU or Keyword..." aria-label="Search SKU or keyword">
+			<button type="submit" aria-label="Search">
+				<span class="material-symbols-outlined" aria-hidden="true">search</span>
+			</button>
+		</form>
+
+		<div class="ec-dashboard-actions">
+			<a href="/cart" aria-label="Cart">
+				<span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+			</a>
+			<a href="/account" aria-label="Profile">
+				<span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
+			</a>
+		</div>
+	</header>
+
+	<div class="ec-account-message" data-account-message></div>
+
+	{% if non_customer_user %}
+	<section class="ec-dashboard-empty">
+		<h1>Portal Account Required</h1>
+		<p>You are logged in as a system user. This page is for website customer accounts only.</p>
+		<a href="/customer-login" class="ec-dashboard-primary-action">Customer Login</a>
+	</section>
+	{% else %}
+	<div class="ec-dashboard-body" id="dashboard">
+		<aside class="ec-dashboard-sidebar">
+			<div class="ec-dashboard-company">
+				<h2>{{ account_label }}</h2>
+				<p>{{ customer.customer_group or "Procurement" }}</p>
+				<span>Account ID: {{ customer.name or "-" }}</span>
+			</div>
+
+			<nav class="ec-dashboard-side-nav" aria-label="Customer account sections">
+				<a class="is-active" href="#dashboard">
+					<span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
+					Dashboard
+				</a>
+				<a href="#orders">
+					<span class="material-symbols-outlined" aria-hidden="true">orders</span>
+					Orders
+				</a>
+				<a href="#addresses">
+					<span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+					Addresses
+				</a>
+				<a href="#profile-settings">
+					<span class="material-symbols-outlined" aria-hidden="true">settings</span>
+					Settings
+				</a>
+			</nav>
+
+			<div class="ec-dashboard-user">
+				{% if user.user_image %}
+				<img src="{{ user.user_image | abs_url }}" alt="{{ display_name }}">
+				{% else %}
+				<span class="material-symbols-outlined" aria-hidden="true">person</span>
+				{% endif %}
+				<div>
+					<strong>{{ display_name }}</strong>
+					<p>{{ customer.customer_group or "Procurement Manager" }}</p>
+				</div>
+			</div>
+
+			<button type="button" class="ec-dashboard-logout" data-account-logout-btn>
+				<span class="material-symbols-outlined" aria-hidden="true">logout</span>
+				Logout
+			</button>
+		</aside>
+
+		<section class="ec-dashboard-content">
+			{% if account_error %}
+			<div class="ec-dashboard-alert">
+				<p>{{ account_error }}</p>
+			</div>
+			{% endif %}
+
+			<header class="ec-dashboard-welcome">
+				<h1>Welcome back, {{ display_name }}</h1>
+				<p>Manage your industrial inventory and procurement pipeline from your centralized dashboard.</p>
+			</header>
+
+			<section class="ec-dashboard-stats" aria-label="Account summary">
+				<article class="ec-dashboard-stat-card">
+					<div>
+						<span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+						<small>Last 30 Days</small>
+					</div>
+					<p>Recent Orders</p>
+					<strong>{{ metrics.recent_orders_count or 0 }}</strong>
+				</article>
+
+				<article class="ec-dashboard-stat-card">
+					<div>
+						<span class="material-symbols-outlined is-gold" aria-hidden="true">payments</span>
+						<small>YTD Spend</small>
+					</div>
+					<p>Total Spend</p>
+					<strong>{{ metrics.formatted_ytd_spend or 0 }}</strong>
+				</article>
+
+				<article class="ec-dashboard-stat-card">
+					<div>
+						<span class="material-symbols-outlined is-brown" aria-hidden="true">request_quote</span>
+						<small>Pending</small>
+					</div>
+					<p>Active Quotes</p>
+					{% set quotes_count = metrics.active_quotes_count or 0 %}
+					<strong>{% if quotes_count < 10 %}0{% endif %}{{ quotes_count }}</strong>
+				</article>
+			</section>
+
+			<section class="ec-dashboard-info-grid">
+				<article class="ec-dashboard-card ec-dashboard-account-card" id="profile-settings">
+					<input type="checkbox" id="ec-dashboard-profile-toggle" class="ec-dashboard-edit-toggle">
+					<div class="ec-dashboard-card-head">
+						<h2>Account Details</h2>
+						<label for="ec-dashboard-profile-toggle">Edit Profile</label>
+					</div>
+
+					<div class="ec-dashboard-details-grid">
+						<div>
+							<small>First Name</small>
+							<p>{{ user.first_name or "-" }}</p>
+						</div>
+						<div>
+							<small>Last Name</small>
+							<p>{{ user.last_name or "-" }}</p>
+						</div>
+						<div>
+							<small>Corporate Email</small>
+							<p>{{ user.email or customer.primary_email or "-" }}</p>
+						</div>
+						<div>
+							<small>Phone Number</small>
+							<p>{{ user.mobile_no or customer.primary_phone or "-" }}</p>
+						</div>
+					</div>
+
+					<form class="ec-dashboard-edit-form" data-account-profile-form method="post">
+						<div class="ec-dashboard-edit-grid">
+							<label>
+								<span>First Name</span>
+								<input type="text" name="first_name" value="{{ user.first_name or '' }}" required>
+							</label>
+							<label>
+								<span>Last Name</span>
+								<input type="text" name="last_name" value="{{ user.last_name or '' }}">
+							</label>
+							<label>
+								<span>Mobile Number</span>
+								<input type="text" name="mobile_no" value="{{ user.mobile_no or customer.primary_phone or '' }}">
+							</label>
+							<label>
+								<span>Customer Display Name</span>
+								<input type="text" name="customer_name" value="{{ customer.customer_name or '' }}">
+							</label>
+							<label>
+								<span>Website</span>
+								<input type="text" name="website" value="{{ customer.website or '' }}">
+							</label>
+						</div>
+						<button type="submit">Save Profile</button>
+					</form>
+				</article>
+
+				<article class="ec-dashboard-card ec-dashboard-address-card" id="addresses">
+					<div class="ec-dashboard-card-head">
+						<h2>Primary Address</h2>
+						<span class="material-symbols-outlined" aria-hidden="true">home</span>
+					</div>
+
+					{% if primary_address.name %}
+					<div class="ec-dashboard-address">
+						<strong>{{ primary_address.address_title or account_label }}</strong>
+						<p>{{ primary_address.address_line1 }}</p>
+						{% if primary_address.address_line2 %}<p>{{ primary_address.address_line2 }}</p>{% endif %}
+						<p>
+							{{ primary_address.city }}{% if primary_address.state %}, {{ primary_address.state }}{% endif %}
+							{{ primary_address.pincode or "" }}
+						</p>
+						<p>{{ primary_address.country }}</p>
+					</div>
+					{% else %}
+					<div class="ec-dashboard-address is-empty">
+						<strong>No primary address</strong>
+						<p>Add billing or shipping addresses during checkout.</p>
+					</div>
+					{% endif %}
+
+					<a href="/checkout" class="ec-dashboard-outline-action">Manage Addresses</a>
+				</article>
+			</section>
+
+			<section class="ec-dashboard-card ec-dashboard-orders" id="orders">
+				<div class="ec-dashboard-orders-head">
+					<h2>Recent Orders</h2>
+					<a href="#orders">View All History</a>
+				</div>
+
+				{% if account.orders %}
+				<div class="ec-dashboard-table-wrap">
+					<table class="ec-dashboard-orders-table">
+						<thead>
+							<tr>
+								<th>Order ID</th>
+								<th>Date</th>
+								<th>Status</th>
+								<th>Total</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for order in account.orders %}
+							{% set order_status = order.delivery_status or order.status or "-" %}
+							{% set status_lower = order_status | lower %}
+							<tr>
+								<td><strong>#{{ order.name }}</strong></td>
+								<td>{{ frappe.format(order.transaction_date, {"fieldtype": "Date"}) }}</td>
+								<td>
+									<span class="ec-dashboard-status {% if 'not' in status_lower or 'process' in status_lower or 'to ' in status_lower %}is-processing{% elif 'ship' in status_lower or 'deliver' in status_lower or 'complete' in status_lower %}is-shipped{% else %}is-delivered{% endif %}">
+										{{ order_status }}
+									</span>
+								</td>
+								<td>{{ order.formatted_total }}</td>
+								<td>
+									<button type="button" class="ec-dashboard-detail-btn" data-order-detail-btn data-order-name="{{ order.name }}">
+										Details
+									</button>
+								</td>
+							</tr>
+							<tr class="ec-dashboard-order-detail-row" data-order-detail-row="{{ order.name }}" hidden>
+								<td colspan="5">
+									<div class="ec-order-detail-content" data-order-detail-content="{{ order.name }}"></div>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				{% else %}
+				<div class="ec-dashboard-empty-state">
+					<p>No orders yet. Start shopping to place your first order.</p>
+					<a href="/shop">Browse Products</a>
+				</div>
+				{% endif %}
+			</section>
+
+		</section>
+	</div>
+	{% endif %}
+
+	<footer class="ec-dashboard-footer">
+		<div>
+			<strong>{{ home.site_title or "IndustrialDirect" }}</strong>
+			<p>&copy; {{ current_year }} {{ home.site_title or "IndustrialDirect" }} B2B Distribution. All rights reserved.</p>
+		</div>
+		<nav aria-label="Account footer">
+			<a href="/terms">Terms of Service</a>
+			<a href="/privacy">Privacy Policy</a>
+			<a href="/contact">Contact Support</a>
+			<a href="/contact">Returns</a>
+		</nav>
+	</footer>
+</main>
+{% endblock %}

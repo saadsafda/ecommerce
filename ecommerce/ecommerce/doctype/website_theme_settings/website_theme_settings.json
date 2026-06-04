@@ -1,0 +1,135 @@
+{
+ "actions": [],
+ "creation": "2026-06-04 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "branding_section",
+  "logo",
+  "mobile_logo",
+  "favicon",
+  "color_palette_section",
+  "primary_color",
+  "secondary_color",
+  "background_color",
+  "text_color",
+  "column_break_9",
+  "header_background_color",
+  "footer_background_color",
+  "typography_section",
+  "heading_font_family",
+  "body_font_family"
+ ],
+ "fields": [
+  {
+   "fieldname": "branding_section",
+   "fieldtype": "Section Break",
+   "label": "Branding"
+  },
+  {
+   "fieldname": "logo",
+   "fieldtype": "Attach Image",
+   "label": "Logo"
+  },
+  {
+   "fieldname": "mobile_logo",
+   "fieldtype": "Attach Image",
+   "label": "Mobile Logo"
+  },
+  {
+   "fieldname": "favicon",
+   "fieldtype": "Attach Image",
+   "label": "Favicon"
+  },
+  {
+   "fieldname": "color_palette_section",
+   "fieldtype": "Section Break",
+   "label": "Color Palette"
+  },
+  {
+   "default": "#0E7490",
+   "fieldname": "primary_color",
+   "fieldtype": "Color",
+   "label": "Primary Color"
+  },
+  {
+   "default": "#F59E0B",
+   "fieldname": "secondary_color",
+   "fieldtype": "Color",
+   "label": "Secondary Color"
+  },
+  {
+   "default": "#FFFFFF",
+   "fieldname": "background_color",
+   "fieldtype": "Color",
+   "label": "Background Color"
+  },
+  {
+   "default": "#111827",
+   "fieldname": "text_color",
+   "fieldtype": "Color",
+   "label": "Text Color"
+  },
+  {
+   "fieldname": "column_break_9",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "#FFFFFF",
+   "fieldname": "header_background_color",
+   "fieldtype": "Color",
+   "label": "Header Background Color"
+  },
+  {
+   "default": "#0F172A",
+   "fieldname": "footer_background_color",
+   "fieldtype": "Color",
+   "label": "Footer Background Color"
+  },
+  {
+   "fieldname": "typography_section",
+   "fieldtype": "Section Break",
+   "label": "Typography"
+  },
+  {
+   "default": "Space Grotesk",
+   "fieldname": "heading_font_family",
+   "fieldtype": "Data",
+   "label": "Heading Font Family"
+  },
+  {
+   "default": "Manrope",
+   "fieldname": "body_font_family",
+   "fieldtype": "Data",
+   "label": "Body Font Family"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "module": "Ecommerce",
+ "name": "Website Theme Settings",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Website Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,93 @@
+{
+ "actions": [],
+ "creation": "2026-06-04 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "defaults_section",
+  "default_meta_title",
+  "default_meta_description",
+  "default_meta_keywords",
+  "global_og_image",
+  "tracking_section",
+  "google_analytics_id",
+  "facebook_pixel_id",
+  "custom_header_scripts"
+ ],
+ "fields": [
+  {
+   "fieldname": "defaults_section",
+   "fieldtype": "Section Break",
+   "label": "Default SEO Metadata"
+  },
+  {
+   "fieldname": "default_meta_title",
+   "fieldtype": "Data",
+   "label": "Default Meta Title"
+  },
+  {
+   "fieldname": "default_meta_description",
+   "fieldtype": "Small Text",
+   "label": "Default Meta Description"
+  },
+  {
+   "fieldname": "default_meta_keywords",
+   "fieldtype": "Small Text",
+   "label": "Default Meta Keywords"
+  },
+  {
+   "fieldname": "global_og_image",
+   "fieldtype": "Attach Image",
+   "label": "Global OG Image"
+  },
+  {
+   "fieldname": "tracking_section",
+   "fieldtype": "Section Break",
+   "label": "Tracking and Header Scripts"
+  },
+  {
+   "fieldname": "google_analytics_id",
+   "fieldtype": "Data",
+   "label": "Google Analytics ID"
+  },
+  {
+   "fieldname": "facebook_pixel_id",
+   "fieldtype": "Data",
+   "label": "Facebook Pixel ID"
+  },
+  {
+   "fieldname": "custom_header_scripts",
+   "fieldtype": "Code",
+   "label": "Custom Header Scripts",
+   "options": "HTML"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "module": "Ecommerce",
+ "name": "Website SEO Settings",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Website Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

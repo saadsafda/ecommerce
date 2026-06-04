@@ -1,0 +1,104 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block page_container %}
+{% set theme = ecommerce_theme or theme_settings or {} %}
+{% set home = ecommerce_home_settings or home_settings or {} %}
+
+<main class="ec-login-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}" data-customer-login-page>
+	<div class="ec-login-bg" aria-hidden="true"></div>
+	<input type="hidden" data-redirect-to value="{{ redirect_to }}">
+
+	<header class="ec-login-brand">
+		<a href="/" class="ec-login-logo" aria-label="{{ home.site_title or 'Store' }}">
+			{% if theme.logo %}
+			<img src="{{ theme.logo | abs_url }}" alt="{{ home.site_title or 'Store' }}">
+			{% else %}
+			<span>{{ (home.site_title or "EC")[:2] }}</span>
+			{% endif %}
+		</a>
+		<h1>{{ home.site_title or "Corporate Portal" }}</h1>
+		<p>B2B Wholesale &amp; Distribution Management</p>
+	</header>
+
+	<section class="ec-login-main" aria-label="Customer login">
+		<div class="ec-account-message" data-account-message></div>
+
+		{% if non_customer_user %}
+		<div class="ec-login-card ec-login-notice">
+			<h2>System User Session Detected</h2>
+			<p>You are currently logged in as a system user. Please logout first and login as website customer.</p>
+			<div class="ec-login-actions">
+				<a href="/app" class="ec-login-secondary-btn">Go to Desk</a>
+				<a href="/api/method/logout" class="ec-login-primary-btn">Logout</a>
+			</div>
+		</div>
+		{% else %}
+		<div class="ec-login-card">
+			<div class="ec-login-card-head">
+				<h2>Welcome back</h2>
+				<p>Please enter your professional credentials to continue.</p>
+			</div>
+
+			<form class="ec-login-form" data-account-login-form method="post">
+				<div class="ec-login-field">
+					<label for="customer-login-email">Business Email</label>
+					<div class="ec-login-input-wrap">
+						<span class="material-symbols-outlined ec-login-input-icon" aria-hidden="true">mail</span>
+						<input id="customer-login-email" type="email" name="email" placeholder="name@company.com" required autocomplete="email">
+					</div>
+				</div>
+
+				<div class="ec-login-field">
+					<div class="ec-login-label-row">
+						<label for="customer-login-password">Password</label>
+						<a href="/customer-forgot-password">Forgot Password?</a>
+					</div>
+					<div class="ec-login-input-wrap">
+						<span class="material-symbols-outlined ec-login-input-icon" aria-hidden="true">lock</span>
+						<input id="customer-login-password" type="password" name="password" placeholder="Password" required autocomplete="current-password">
+						<button type="button" class="ec-login-password-toggle" data-password-toggle aria-label="Show password">
+							<span class="material-symbols-outlined" data-password-icon aria-hidden="true">visibility</span>
+						</button>
+					</div>
+				</div>
+
+				<label class="ec-login-remember">
+					<input type="checkbox" name="remember">
+					<span>Remember this device for 30 days</span>
+				</label>
+
+				<button type="submit" class="ec-login-primary-btn" data-login-submit>
+					<span>Login</span>
+					<span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+				</button>
+			</form>
+
+			<div class="ec-login-register">
+				<p>
+					Don't have a corporate account?
+					<a href="/customer-register">
+						Request Access
+						<span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+					</a>
+				</p>
+			</div>
+		</div>
+		{% endif %}
+
+		<footer class="ec-login-trust">
+			<p>&copy; {{ current_year }} {{ home.site_title or "Frappe Ecommerce" }}</p>
+			<div>
+				<a href="/contact">Compliance</a>
+				<a href="/contact">Security</a>
+				<a href="/contact">Help Center</a>
+			</div>
+		</footer>
+	</section>
+</main>
+{% endblock %}

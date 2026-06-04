@@ -1,0 +1,129 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block page_container %}
+{% set theme = ecommerce_theme or theme_settings or {} %}
+{% set home = ecommerce_home_settings or home_settings or {} %}
+
+<main class="ec-register-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}" data-customer-register-page>
+	<input type="hidden" data-redirect-to value="{{ redirect_to }}">
+
+	<header class="ec-register-brand">
+		<a href="/" class="ec-register-logo" aria-label="{{ home.site_title or 'Frappe Ecommerce' }}">
+			{% if theme.logo %}
+			<img src="{{ theme.logo | abs_url }}" alt="{{ home.site_title or 'Frappe Ecommerce' }}">
+			{% else %}
+			<span class="ec-register-logo-mark">
+				<span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+				<strong>FRAPPE</strong>
+				<small>ECOMMERCE</small>
+			</span>
+			{% endif %}
+		</a>
+		<h1>Join Frappe Ecommerce</h1>
+		<p>Access premium B2B wholesale inventory</p>
+	</header>
+
+	<section class="ec-register-main" aria-label="Customer registration">
+		<div class="ec-account-message" data-account-message></div>
+
+		{% if non_customer_user %}
+		<div class="ec-register-card ec-register-notice">
+			<h2>System User Session Detected</h2>
+			<p>You are currently logged in as a system user. Please logout first and create a customer account.</p>
+			<div class="ec-register-actions">
+				<a href="/app" class="ec-register-secondary-btn">Go to Desk</a>
+				<a href="/api/method/logout" class="ec-register-primary-btn">Logout</a>
+			</div>
+		</div>
+		{% else %}
+		<div class="ec-register-card">
+			<form class="ec-register-form" data-account-signup-form method="post">
+				<div class="ec-register-grid">
+					<div class="ec-register-field">
+						<label for="customer-register-first-name">First Name</label>
+						<input id="customer-register-first-name" type="text" name="first_name" placeholder="John" required autocomplete="given-name">
+					</div>
+
+					<div class="ec-register-field">
+						<label for="customer-register-last-name">Last Name</label>
+						<input id="customer-register-last-name" type="text" name="last_name" placeholder="Doe" autocomplete="family-name">
+					</div>
+				</div>
+
+				<div class="ec-register-field">
+					<label for="customer-register-email">Corporate Email Address</label>
+					<div class="ec-register-input-wrap">
+						<span class="material-symbols-outlined ec-register-input-icon" aria-hidden="true">mail</span>
+						<input id="customer-register-email" type="email" name="email" placeholder="j.doe@company.com" required autocomplete="email">
+					</div>
+				</div>
+
+				<div class="ec-register-field">
+					<label for="customer-register-phone">Phone Number</label>
+					<div class="ec-register-input-wrap">
+						<span class="material-symbols-outlined ec-register-input-icon" aria-hidden="true">call</span>
+						<input id="customer-register-phone" type="tel" name="mobile_no" placeholder="+1 (555) 000-0000" autocomplete="tel">
+					</div>
+				</div>
+
+				<div class="ec-register-field">
+					<label for="customer-register-password">Password</label>
+					<div class="ec-register-input-wrap">
+						<span class="material-symbols-outlined ec-register-input-icon" aria-hidden="true">lock</span>
+						<input id="customer-register-password" type="password" name="password" placeholder="********" required minlength="8" autocomplete="new-password">
+					</div>
+					<p class="ec-register-hint">Must be at least 8 characters long</p>
+				</div>
+
+				<label class="ec-register-terms">
+					<input type="checkbox" required>
+					<span>
+						I agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.
+					</span>
+				</label>
+
+				<button type="submit" class="ec-register-primary-btn" data-register-submit>
+					<span>Create Account</span>
+					<span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+				</button>
+			</form>
+
+			<div class="ec-register-login-link">
+				Already have a corporate account?
+				<a href="/customer-login">Log In Here</a>
+			</div>
+		</div>
+		{% endif %}
+
+		<div class="ec-register-trust" aria-label="B2B service benefits">
+			<div>
+				<span class="material-symbols-outlined" aria-hidden="true">local_shipping</span>
+				<strong>Global<br>Distribution</strong>
+			</div>
+			<div>
+				<span class="material-symbols-outlined" aria-hidden="true">verified</span>
+				<strong>Certified Quality</strong>
+			</div>
+			<div>
+				<span class="material-symbols-outlined" aria-hidden="true">support_agent</span>
+				<strong>24/7 B2B<br>Support</strong>
+			</div>
+		</div>
+	</section>
+
+	<footer class="ec-register-footer">
+		<p>&copy; {{ current_year }} {{ home.site_title or "Frappe Ecommerce" }}. All Rights Reserved.</p>
+		<nav aria-label="Registration footer">
+			<a href="/privacy">Privacy</a>
+			<a href="/terms">Terms</a>
+			<a href="/contact">Help Center</a>
+		</nav>
+	</footer>
+</main>
+{% endblock %}

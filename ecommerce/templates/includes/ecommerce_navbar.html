@@ -1,0 +1,116 @@
+{% set theme = ecommerce_theme or theme_settings or {} %}
+{% set home = ecommerce_home_settings or home_settings or {} %}
+
+{# Google Fonts: Poppins + Material Symbols #}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+<header class="ec-navbar-shell" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}">
+	{# Announcement / Top Bar #}
+	<div class="ec-topbar">
+		<div class="ec-container ec-topbar-inner">
+			<p class="ec-topbar-text">
+				<span class="material-symbols-outlined" style="font-size:16px">local_shipping</span>
+				{{ home.top_bar_text or "FREE FREIGHT ON ORDERS OVER $1,500 | OFFICIAL B2B DISTRIBUTOR" }}
+			</p>
+			<div class="ec-topbar-meta">
+				{% if home.hotline_number %}
+				<a class="ec-hotline" href="tel:{{ home.hotline_number }}">
+					<span class="material-symbols-outlined" style="font-size:14px">call</span>
+					{{ home.hotline_number }}
+				</a>
+				{% endif %}
+				{% if customer_authenticated %}
+				<a href="/account">
+					<span class="material-symbols-outlined" style="font-size:14px">person</span>
+					My Account
+				</a>
+				{% else %}
+				<a href="/customer-login">
+					<span class="material-symbols-outlined" style="font-size:14px">login</span>
+					Login / Register
+				</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+	{# Main Header #}
+	<div class="ec-main-header">
+		<div class="ec-container ec-main-header-inner">
+			<a href="/" class="ec-brand">
+				{% if theme.logo %}
+				<img src="{{ theme.logo | abs_url }}" alt="{{ home.site_title or 'Store' }}">
+				{% else %}
+				<span>{{ home.site_title or "Frappe Ecommerce" }}</span>	
+				{% endif %}
+			</a>
+
+			<form action="/shop" method="get" class="ec-search-form">
+				<button type="submit" aria-label="Search">
+					<span class="material-symbols-outlined" style="font-size:20px">search</span>
+				</button>
+				<input
+					type="search"
+					name="q"
+					value="{{ frappe.form_dict.get('q') or '' }}"
+					placeholder="Search catalog by SKU, name, or category..."
+					aria-label="Search products"
+				>
+			</form>
+
+			<div class="ec-header-actions">
+				<button type="button" class="ec-header-icon-btn" aria-label="Favorites">
+					<span class="material-symbols-outlined">favorite</span>
+				</button>
+				<a href="/cart" class="ec-cart-pill" aria-label="Open cart">
+					<span class="material-symbols-outlined">shopping_cart</span>
+					<span>Cart</span>
+					<strong data-cart-badge-count>0</strong>
+				</a>
+				{% if customer_authenticated %}
+				<a href="/account" class="ec-header-icon-btn" aria-label="Account">
+					<span class="material-symbols-outlined">person</span>
+				</a>
+				{% else %}
+				<a href="/customer-login" class="ec-header-icon-btn" aria-label="Login">
+					<span class="material-symbols-outlined">person</span>
+				</a>
+				{% endif %}
+				<button type="button" class="ec-menu-toggle" data-mobile-menu-toggle aria-label="Open navigation menu">
+					<span class="material-symbols-outlined">menu</span>
+					Menu
+				</button>
+			</div>
+		</div>
+	</div>
+
+	{# Navigation Row (Desktop) #}
+	<nav class="ec-nav-row">
+		<div class="ec-container ec-nav-row-inner">
+			<div class="ec-nav-links">
+				<a href="/">Home</a>
+				<a href="/shop">All Categories</a>
+				<a href="/shop#brands">Shop by Brand</a>
+				<a href="/contact">Bulk Orders</a>
+				<a href="/account">Account</a>
+			</div>
+			<a href="{{ home.primary_cta_route or '/shop' }}" class="ec-nav-cta">
+				{{ home.primary_cta_label or "Shop Now" }}
+				<span class="material-symbols-outlined" style="font-size:16px">arrow_forward</span>
+			</a>
+		</div>
+	</nav>
+
+	{# Mobile Menu #}
+	<div class="ec-mobile-menu" data-mobile-menu>
+		<a href="/">Home</a>
+		<a href="/shop">All Categories</a>
+		<a href="/shop#brands">Shop by Brand</a>
+		<a href="/contact">Bulk Orders</a>
+		<a href="/account">Account</a>
+		<a href="{{ home.primary_cta_route or '/shop' }}" class="ec-mobile-cta">{{ home.primary_cta_label or "Shop Now" }}</a>
+	</div>
+</header>

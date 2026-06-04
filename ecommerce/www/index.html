@@ -1,0 +1,235 @@
+{% extends "templates/web.html" %}
+{% set home = ecommerce_home_settings or home_settings or {} %}
+
+{% block navbar %}
+	{% include "ecommerce/templates/includes/ecommerce_navbar.html" %}
+{% endblock %}
+
+{% block footer %}
+	{% include "ecommerce/templates/includes/ecommerce_footer.html" %}
+{% endblock %}
+
+{% block page_container %}
+<main class="ec-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}">
+	{# ===== HERO SECTION ===== #}
+	<section class="ec-hero-section">
+		<div class="ec-container">
+			{% if banners %}
+			<div class="ec-hero-slider" data-ecom-slider>
+				<div class="ec-hero-orb ec-hero-orb-1"></div>
+				<div class="ec-hero-orb ec-hero-orb-2"></div>
+				{% for banner in banners %}
+				<article
+					class="ec-hero-slide {% if banner.desktop_image or banner.mobile_image %}has-hero-image{% endif %} {% if loop.first %}is-active{% endif %}"
+					data-slide
+					{% if banner.desktop_image or banner.mobile_image %}
+					style="--ec-hero-image: url('{{ (banner.desktop_image or banner.mobile_image) | abs_url }}');"
+					{% endif %}
+				>
+					<div class="ec-hero-copy">
+						{% if banner.badge_text %}
+						<span class="ec-badge">{{ banner.badge_text }}</span>
+						{% endif %}
+						<h1>{{ banner.banner_title }}</h1>
+						{% if banner.subtitle %}
+						<p>{{ banner.subtitle }}</p>
+						{% elif home.hero_subtitle %}
+						<p>{{ home.hero_subtitle }}</p>
+						{% endif %}
+						<div class="ec-hero-actions">
+							<a href="{{ banner.button_route or home.primary_cta_route or '/shop' }}" class="ec-primary-btn">
+								{{ banner.button_text or home.primary_cta_label or "Shop Now" }}
+								<span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
+							</a>
+							<a href="{{ home.secondary_cta_route or '/contact' }}" class="ec-secondary-btn">
+								{{ home.secondary_cta_label or "Contact Sales" }}
+							</a>
+						</div>
+					</div>
+					<div class="ec-hero-media">
+						{% if banner.desktop_image %}
+						<img src="{{ banner.desktop_image | abs_url }}" alt="{{ banner.banner_title }}">
+						{% elif banner.mobile_image %}
+						<img src="{{ banner.mobile_image | abs_url }}" alt="{{ banner.banner_title }}">
+						{% else %}
+						<div class="ec-hero-media-fallback">{{ home.site_title or "Storefront" }}</div>
+						{% endif %}
+					</div>
+				</article>
+				{% endfor %}
+				{% if banners|length > 1 %}
+				<div class="ec-slider-dots">
+					{% for banner in banners %}
+					<button
+						type="button"
+						class="{% if loop.first %}is-active{% endif %}"
+						data-slide-trigger="{{ loop.index0 }}"
+						aria-label="Go to slide {{ loop.index }}"
+					></button>
+					{% endfor %}
+				</div>
+				{% endif %}
+			</div>
+			{% else %}
+			<div class="ec-hero-fallback ec-reveal">
+				<div class="ec-hero-orb ec-hero-orb-1"></div>
+				<div class="ec-hero-orb ec-hero-orb-2"></div>
+				<h1>{{ home.hero_title or "Industrial Grade Solutions" }}</h1>
+				<p>{{ home.hero_subtitle or "Professional tools and equipment for your business needs" }}</p>
+				<div class="ec-hero-actions" style="justify-content:center;">
+					<a href="{{ home.primary_cta_route or '/shop' }}" class="ec-primary-btn">
+						{{ home.primary_cta_label or "Shop Now" }}
+						<span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
+					</a>
+					<a href="{{ home.secondary_cta_route or '/contact' }}" class="ec-secondary-btn">
+						{{ home.secondary_cta_label or "Contact Sales" }}
+					</a>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</section>
+
+	{# ===== VALUE PROPOSITIONS ===== #}
+	<section class="ec-section" style="padding-top:48px;padding-bottom:48px;">
+		<div class="ec-container">
+			<div class="ec-value-props">
+				<div class="ec-value-prop ec-reveal">
+					<div class="ec-value-prop-icon">
+						<span class="material-symbols-outlined">local_shipping</span>
+					</div>
+					<h4>Free Bulk Delivery</h4>
+					<p>Complimentary freight on all orders over $1,500 with real-time tracking and dedicated logistics.</p>
+				</div>
+				<div class="ec-value-prop ec-reveal">
+					<div class="ec-value-prop-icon">
+						<span class="material-symbols-outlined">integration_instructions</span>
+					</div>
+					<h4>B2B Integration</h4>
+					<p>Seamless API integration for automated procurement, inventory sync, and real-time pricing.</p>
+				</div>
+				<div class="ec-value-prop ec-reveal">
+					<div class="ec-value-prop-icon">
+						<span class="material-symbols-outlined">support_agent</span>
+					</div>
+					<h4>Expert Support</h4>
+					<p>Dedicated account managers and 24/7 technical support for corporate clients worldwide.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	{# ===== FEATURED CATEGORIES ===== #}
+	{% if home.show_featured_categories and featured_categories %}
+	<section class="ec-section ec-alt-section">
+		<div class="ec-container">
+			<div class="ec-section-head ec-reveal">
+				<h2>{{ home.featured_categories_title or "Featured Categories" }}</h2>
+				<a href="/shop">View All</a>
+			</div>
+			<div class="ec-category-grid">
+				{% for category in featured_categories %}
+				<a href="/shop?item_group={{ category.name }}" class="ec-category-card ec-reveal">
+					<div class="ec-category-image">
+						{% if category.image %}
+						<img src="{{ category.image | abs_url }}" alt="{{ category.item_group_name or category.name }}">
+						{% else %}
+						<span>{{ (category.item_group_name or category.name)[:1] }}</span>
+						{% endif %}
+					</div>
+					<h3>{{ category.item_group_name or category.name }}</h3>
+				</a>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	{% endif %}
+
+	{# ===== NEW IN STORE ===== #}
+	{% if home.show_new_items and new_items %}
+	<section class="ec-section">
+		<div class="ec-container">
+			<div class="ec-section-head ec-reveal">
+				<h2>{{ home.new_items_title or "New In Store" }}</h2>
+				<a href="/shop">Browse Catalog</a>
+			</div>
+			<div class="ec-product-grid">
+				{% for item in new_items %}
+					{% include "ecommerce/templates/includes/ecommerce_product_card.html" %}
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	{% endif %}
+
+	{# ===== PROMO BLOCK ===== #}
+	<section class="ec-promo-block">
+		<div class="ec-promo-inner">
+			<div class="ec-promo-image">
+				<div style="width:100%;height:100%;background:linear-gradient(135deg, #1a3a6b 0%, #002451 100%);display:flex;align-items:center;justify-content:center;">
+					<span class="material-symbols-outlined" style="font-size:120px;color:rgba(232,184,75,0.15)">precision_manufacturing</span>
+				</div>
+			</div>
+			<div class="ec-promo-copy">
+				<h2>Built for <span>Industrial Scale</span></h2>
+				<p>From precision measurement tools to heavy-duty machinery — our curated catalog serves professionals who demand reliability and performance at every level.</p>
+				<a href="/shop" class="ec-primary-btn">
+					Explore Full Catalog
+					<span class="material-symbols-outlined" style="font-size:18px">arrow_forward</span>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	{# ===== BACK IN STORE ===== #}
+	{% if home.show_back_in_store and back_in_store_items %}
+	<section class="ec-section ec-alt-section">
+		<div class="ec-container">
+			<div class="ec-section-head ec-reveal">
+				<h2>{{ home.back_in_store_title or "Back In Store" }}</h2>
+				<a href="/shop">See More</a>
+			</div>
+			<div class="ec-product-grid">
+				{% for item in back_in_store_items %}
+					{% include "ecommerce/templates/includes/ecommerce_product_card.html" %}
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	{% endif %}
+
+	{# ===== BRANDS ===== #}
+	{% if home.show_brands and brands %}
+	<section class="ec-marquee-section" id="brands">
+		<div class="ec-container" style="margin-bottom:24px;">
+			<div class="ec-section-head ec-reveal" style="margin-bottom:0;">
+				<h2>{{ home.brands_section_title or "Trusted By Industry Leaders" }}</h2>
+			</div>
+		</div>
+		<div class="ec-marquee-track">
+			{% for brand in brands %}
+			<div class="ec-marquee-item">
+				{% if brand.image %}
+				<img src="{{ brand.image | abs_url }}" alt="{{ brand.brand or brand.name }}" style="height:32px;object-fit:contain;filter:grayscale(100%);opacity:0.5;">
+				{% else %}
+				<span class="material-symbols-outlined" style="font-size:20px">verified</span>
+				{{ brand.brand or brand.name }}
+				{% endif %}
+			</div>
+			{% endfor %}
+			{# Duplicate for seamless marquee #}
+			{% for brand in brands %}
+			<div class="ec-marquee-item">
+				{% if brand.image %}
+				<img src="{{ brand.image | abs_url }}" alt="{{ brand.brand or brand.name }}" style="height:32px;object-fit:contain;filter:grayscale(100%);opacity:0.5;">
+				{% else %}
+				<span class="material-symbols-outlined" style="font-size:20px">verified</span>
+				{{ brand.brand or brand.name }}
+				{% endif %}
+			</div>
+			{% endfor %}
+		</div>
+	</section>
+	{% endif %}
+</main>
+{% endblock %}

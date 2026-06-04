@@ -1,0 +1,67 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}
+	{% include "ecommerce/templates/includes/ecommerce_navbar.html" %}
+{% endblock %}
+
+{% block footer %}
+	{% include "ecommerce/templates/includes/ecommerce_footer.html" %}
+{% endblock %}
+
+{% block page_container %}
+<main class="ec-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}" data-customer-reset-page>
+	<section class="ec-account-hero">
+		<div class="ec-container">
+			<h1>Reset Password</h1>
+			<p>Choose a new password for your customer account.</p>
+		</div>
+	</section>
+
+	<section class="ec-section">
+		<div class="ec-container">
+			<div class="ec-account-message" data-account-message></div>
+			<input type="hidden" data-redirect-to value="{{ redirect_to }}">
+
+			{% if non_customer_user %}
+			<div class="ec-account-notice ec-reveal">
+				<h2>System User Session Detected</h2>
+				<p>You are currently logged in as a system user. Please logout first to continue.</p>
+				<div class="ec-login-actions">
+					<a href="/app" class="ec-secondary-btn">Go to Desk</a>
+					<a href="/api/method/logout" class="ec-primary-btn">Logout</a>
+				</div>
+			</div>
+			{% elif not reset_token %}
+			<div class="ec-account-notice ec-reveal">
+				<h2>Invalid Reset Link</h2>
+				<p>This password reset link is missing token. Please request a new reset email.</p>
+				<div class="ec-login-actions">
+					<a href="/customer-forgot-password" class="ec-primary-btn">Request New Link</a>
+				</div>
+			</div>
+			{% else %}
+			<div class="ec-auth-grid ec-auth-grid-single">
+				<div class="ec-auth-card-wrapper ec-reveal">
+					<div class="ec-auth-card">
+						<h2>Set New Password</h2>
+						<form data-account-reset-confirm-form method="post">
+							<input type="hidden" name="token" value="{{ reset_token }}">
+							<label>New Password</label>
+							<input type="password" name="new_password" required minlength="8">
+							<label>Confirm Password</label>
+							<input type="password" name="confirm_password" required minlength="8">
+							<button type="submit" class="ec-secondary-btn">Reset Password</button>
+						</form>
+						<div class="ec-auth-links">
+							<a href="/customer-login">Back to login</a>
+							<a href="/customer-forgot-password">Request another reset link</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</section>
+</main>
+{% endblock %}
+

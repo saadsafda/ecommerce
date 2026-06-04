@@ -5,6 +5,25 @@ app_description = "ecommerce app"
 app_email = "muhammadsaadsafdar2005@gmail.com"
 app_license = "mit"
 
+fixtures = [
+	{
+		"doctype": "Custom Field",
+		"filters": [["module", "=", "Ecommerce"]],
+	}
+]
+
+web_include_css = ["/assets/ecommerce/css/ecommerce_website.css?v=20260604-cart-checkout"]
+web_include_js = [
+	"/assets/ecommerce/js/ecommerce_website.js?v=20260604-cart-checkout",
+	"/assets/ecommerce/js/ecommerce_account.js?v=20260604-checkout",
+]
+home_page = "index"
+update_website_context = ["ecommerce.website.update_website_context"]
+website_route_rules = [
+	{"from_route": "/product/<path:item_key>", "to_route": "product"},
+	{"from_route": "/products/<path:item_key>", "to_route": "product"},
+]
+
 # Apps
 # ------------------
 
@@ -241,4 +260,3 @@ app_license = "mit"
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-

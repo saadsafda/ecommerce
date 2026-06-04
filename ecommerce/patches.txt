@@ -4,3 +4,4 @@
 
 [post_model_sync]
 # Patches added in this section will be executed after doctypes are migrated
+ecommerce.patches.post_model_sync.add_customer_auth_fields

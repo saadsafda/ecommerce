@@ -1,0 +1,134 @@
+{% extends "templates/web.html" %}
+
+{% block navbar %}
+	{% include "ecommerce/templates/includes/ecommerce_navbar.html" %}
+{% endblock %}
+
+{% block footer %}
+	{% include "ecommerce/templates/includes/ecommerce_footer.html" %}
+{% endblock %}
+
+{% block page_container %}
+<main class="ec-page" style="{{ ecommerce_theme_css_variables or theme_css_variables or '' }}">
+	<section class="ec-section ec-product-view">
+		<div class="ec-container">
+			{# Breadcrumbs #}
+			<nav class="ec-breadcrumb ec-reveal">
+				<a href="/">
+					<span class="material-symbols-outlined" style="font-size:16px">home</span>
+				</a>
+				<span class="material-symbols-outlined" style="font-size:16px">chevron_right</span>
+				<a href="/shop">Shop</a>
+				<span class="material-symbols-outlined" style="font-size:16px">chevron_right</span>
+				{% if product.item_group %}
+				<a href="/shop?item_group={{ product.item_group }}">{{ product.item_group }}</a>
+				<span class="material-symbols-outlined" style="font-size:16px">chevron_right</span>
+				{% endif %}
+				<span style="color:var(--ec-primary-deep);font-weight:700;">{{ product.item_name }}</span>
+			</nav>
+
+			{# Product Layout #}
+			<div class="ec-product-layout ec-reveal">
+				{# Product Media #}
+				<div class="ec-product-media">
+					{% if product.image %}
+					<img src="{{ product.image | abs_url }}" alt="{{ product.item_name }}">
+					{% else %}
+					<div class="ec-product-image-fallback">
+						<span class="material-symbols-outlined" style="font-size:80px;opacity:0.15">image</span>
+					</div>
+					{% endif %}
+				</div>
+
+				{# Product Info #}
+				<div class="ec-product-info">
+					<div class="ec-product-meta-row">
+						<span class="ec-stock-badge ec-stock-badge-in">
+							<span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+							In Stock
+						</span>
+						<p class="ec-product-brand">
+							<span class="material-symbols-outlined" aria-hidden="true">verified</span>
+							{{ product.brand or "General" }}
+						</p>
+					</div>
+					<h1>{{ product.item_name }}</h1>
+					<p class="ec-product-sku">
+						<span class="material-symbols-outlined" aria-hidden="true">qr_code_2</span>
+						SKU: {{ product.item_code }}
+					</p>
+					<p class="ec-product-price">{{ product.formatted_price or "Request Quote" }}</p>
+
+					{% if product.description %}
+					<p class="ec-product-desc-large">{{ product.description }}</p>
+					{% endif %}
+
+					{# Action Buttons #}
+					<div class="ec-product-actions">
+						<div class="ec-product-buy-box">
+							<div class="ec-product-qty-row">
+								<label for="product-qty">Quantity</label>
+								<div class="ec-qty-stepper">
+									<button type="button" data-product-qty-minus aria-label="Decrease quantity">
+										<span class="material-symbols-outlined" aria-hidden="true">remove</span>
+									</button>
+									<input id="product-qty" type="number" min="1" value="1" data-product-qty aria-label="Quantity">
+									<button type="button" data-product-qty-plus aria-label="Increase quantity">
+										<span class="material-symbols-outlined" aria-hidden="true">add</span>
+									</button>
+								</div>
+							</div>
+							<div class="ec-product-action-row">
+								<button type="button" class="ec-primary-btn ec-detail-cart-btn" data-add-to-cart="{{ product.item_code }}">
+									<span class="material-symbols-outlined" aria-hidden="true">add_shopping_cart</span>
+									Add to Cart
+								</button>
+								<a href="/contact" class="ec-outline-btn">
+									<span class="material-symbols-outlined" aria-hidden="true">mail</span>
+									Contact Sales
+								</a>
+							</div>
+							<p class="ec-cart-feedback" data-cart-feedback aria-live="polite"></p>
+						</div>
+					</div>
+
+					{# Shipping & Warranty Info #}
+					<div class="ec-product-trust-grid">
+						<div class="ec-product-trust-card">
+							<span class="material-symbols-outlined" aria-hidden="true">local_shipping</span>
+							<div>
+								<strong>Free Bulk Delivery</strong>
+								<span>On orders over $1,500</span>
+							</div>
+						</div>
+						<div class="ec-product-trust-card">
+							<span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
+							<div>
+								<strong>Manufacturer Warranty</strong>
+								<span>Full coverage included</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	{# ===== RELATED PRODUCTS ===== #}
+	{% if related_items %}
+	<section class="ec-section ec-alt-section">
+		<div class="ec-container">
+			<div class="ec-section-head ec-reveal">
+				<h2>Related Products</h2>
+				<a href="/shop">View More</a>
+			</div>
+			<div class="ec-product-grid">
+				{% for item in related_items %}
+					{% include "ecommerce/templates/includes/ecommerce_product_card.html" %}
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	{% endif %}
+</main>
+{% endblock %}

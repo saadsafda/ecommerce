@@ -1,0 +1,56 @@
+<form class="ec-address-form" data-address-form method="post">
+	<div class="ec-account-form-grid">
+		<div>
+			<label>Address Title</label>
+			<input type="text" name="address_title" placeholder="e.g. Home, Office, Warehouse">
+		</div>
+		<div>
+			<label>Type</label>
+			<select name="address_type">
+				<option value="Billing">Billing</option>
+				<option value="Shipping">Shipping</option>
+				<option value="Office">Office</option>
+				<option value="Other">Other</option>
+			</select>
+		</div>
+		<div style="grid-column: 1 / -1;">
+			<label>Address Line 1 <span style="color:var(--ec-error);">*</span></label>
+			<input type="text" name="address_line1" required placeholder="Street address, building, etc.">
+		</div>
+		<div style="grid-column: 1 / -1;">
+			<label>Address Line 2</label>
+			<input type="text" name="address_line2" placeholder="Apartment, suite, floor (optional)">
+		</div>
+		<div>
+			<label>City <span style="color:var(--ec-error);">*</span></label>
+			<input type="text" name="city" required>
+		</div>
+		<div>
+			<label>State / Province</label>
+			<input type="text" name="state">
+		</div>
+		<div>
+			<label>Country</label>
+			<input type="text" name="country" value="Pakistan">
+		</div>
+		<div>
+			<label>Postal Code</label>
+			<input type="text" name="pincode">
+		</div>
+		<div>
+			<label>Phone</label>
+			<input type="text" name="phone">
+		</div>
+		<div>
+			<label>Email</label>
+			<input type="email" name="email_id">
+		</div>
+	</div>
+	<div style="display:flex;gap:8px;margin-top:16px;">
+		<button type="submit" class="ec-primary-btn">
+			<span class="material-symbols-outlined" style="font-size:16px;">save</span>
+			Save Address
+		</button>
+		<button type="button" class="ec-outline-btn" data-cancel-address-form>Cancel</button>
+	</div>
+</form>

@@ -1,0 +1,34 @@
+<article class="ec-product-card ec-reveal">
+	<a href="{{ item.product_route }}" class="ec-product-image-link">
+		<span class="ec-product-card-badge">In Stock</span>
+		{% if item.image %}
+		<img src="{{ item.image | abs_url }}" alt="{{ item.item_name }}">
+		{% else %}
+		<div class="ec-product-image-fallback">
+			<span class="material-symbols-outlined" style="font-size:48px;opacity:0.3">image</span>
+		</div>
+		{% endif %}
+	</a>
+	<div class="ec-product-card-body">
+		<p class="ec-product-brand">{{ item.brand or "General" }} <span>SKU: {{ item.item_code }}</span></p>
+		<h3><a href="{{ item.product_route }}">{{ item.item_name }}</a></h3>
+		<div class="ec-product-rating" aria-label="Product rating">
+			<span class="material-symbols-outlined" aria-hidden="true">star</span>
+			<span class="material-symbols-outlined" aria-hidden="true">star</span>
+			<span class="material-symbols-outlined" aria-hidden="true">star</span>
+			<span class="material-symbols-outlined" aria-hidden="true">star</span>
+			<span class="material-symbols-outlined is-muted" aria-hidden="true">star</span>
+		</div>
+		<div class="ec-product-card-bottom">
+			<strong>{{ item.formatted_price or "Request Quote" }}</strong>
+			<button
+				type="button"
+				class="ec-add-cart-btn"
+				data-add-to-cart="{{ item.item_code }}"
+				aria-label="Add {{ item.item_name }} to cart"
+			>
+				<span class="material-symbols-outlined" aria-hidden="true">add_shopping_cart</span>
+			</button>
+		</div>
+	</div>
+</article>

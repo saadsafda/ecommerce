@@ -1,0 +1,209 @@
+{
+ "actions": [],
+ "creation": "2026-06-04 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "header_section",
+  "site_title",
+  "top_bar_text",
+  "hotline_number",
+  "primary_cta_label",
+  "primary_cta_route",
+  "column_break_6",
+  "secondary_cta_label",
+  "secondary_cta_route",
+  "homepage_section",
+  "hero_title",
+  "hero_subtitle",
+  "featured_categories_title",
+  "new_items_title",
+  "back_in_store_title",
+  "brands_section_title",
+  "column_break_15",
+  "products_per_section",
+  "show_featured_categories",
+  "show_new_items",
+  "show_back_in_store",
+  "show_brands",
+  "seo_section",
+  "home_meta_title",
+  "home_meta_description",
+  "home_meta_keywords"
+ ],
+ "fields": [
+  {
+   "fieldname": "header_section",
+   "fieldtype": "Section Break",
+   "label": "Header"
+  },
+  {
+   "default": "Universal Wholesale Store",
+   "fieldname": "site_title",
+   "fieldtype": "Data",
+   "label": "Site Title"
+  },
+  {
+   "default": "24/7 Delivery | Wholesale Pricing",
+   "fieldname": "top_bar_text",
+   "fieldtype": "Data",
+   "label": "Top Bar Text"
+  },
+  {
+   "fieldname": "hotline_number",
+   "fieldtype": "Data",
+   "label": "Hotline Number"
+  },
+  {
+   "default": "Shop Now",
+   "fieldname": "primary_cta_label",
+   "fieldtype": "Data",
+   "label": "Primary CTA Label"
+  },
+  {
+   "default": "/shop",
+   "fieldname": "primary_cta_route",
+   "fieldtype": "Data",
+   "label": "Primary CTA Route"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Contact Sales",
+   "fieldname": "secondary_cta_label",
+   "fieldtype": "Data",
+   "label": "Secondary CTA Label"
+  },
+  {
+   "default": "/contact",
+   "fieldname": "secondary_cta_route",
+   "fieldtype": "Data",
+   "label": "Secondary CTA Route"
+  },
+  {
+   "fieldname": "homepage_section",
+   "fieldtype": "Section Break",
+   "label": "Homepage Sections"
+  },
+  {
+   "default": "Trusted products for bulk buyers",
+   "fieldname": "hero_title",
+   "fieldtype": "Data",
+   "label": "Hero Title"
+  },
+  {
+   "default": "Manage your complete ecommerce storefront from Frappe backend.",
+   "fieldname": "hero_subtitle",
+   "fieldtype": "Small Text",
+   "label": "Hero Subtitle"
+  },
+  {
+   "default": "Featured Categories",
+   "fieldname": "featured_categories_title",
+   "fieldtype": "Data",
+   "label": "Featured Categories Title"
+  },
+  {
+   "default": "New In Store",
+   "fieldname": "new_items_title",
+   "fieldtype": "Data",
+   "label": "New Items Section Title"
+  },
+  {
+   "default": "Back In Store",
+   "fieldname": "back_in_store_title",
+   "fieldtype": "Data",
+   "label": "Back In Store Section Title"
+  },
+  {
+   "default": "Shop by Brand",
+   "fieldname": "brands_section_title",
+   "fieldtype": "Data",
+   "label": "Brands Section Title"
+  },
+  {
+   "fieldname": "column_break_15",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "8",
+   "fieldname": "products_per_section",
+   "fieldtype": "Int",
+   "label": "Products Per Section"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_featured_categories",
+   "fieldtype": "Check",
+   "label": "Show Featured Categories"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_new_items",
+   "fieldtype": "Check",
+   "label": "Show New Items Section"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_back_in_store",
+   "fieldtype": "Check",
+   "label": "Show Back In Store Section"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_brands",
+   "fieldtype": "Check",
+   "label": "Show Brands Section"
+  },
+  {
+   "fieldname": "seo_section",
+   "fieldtype": "Section Break",
+   "label": "Homepage SEO Override"
+  },
+  {
+   "fieldname": "home_meta_title",
+   "fieldtype": "Data",
+   "label": "Homepage Meta Title"
+  },
+  {
+   "fieldname": "home_meta_description",
+   "fieldtype": "Small Text",
+   "label": "Homepage Meta Description"
+  },
+  {
+   "fieldname": "home_meta_keywords",
+   "fieldtype": "Small Text",
+   "label": "Homepage Meta Keywords"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "module": "Ecommerce",
+ "name": "Website Home Settings",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Website Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
